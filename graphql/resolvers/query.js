@@ -1,12 +1,14 @@
 const {
 	GraphQLObjectType,
 	GraphQLString,
-	GraphQLSchema,
 	GraphQLID,
 	GraphQLInt,
 	GraphQLList,
-	GraphQLNonNull
+	GraphQLNonNull,
+	GraphQLBoolean
 } = require("graphql");
+
+const User = require("../../models/user");
 
 const { userType } = require("../schema");
 
@@ -24,8 +26,23 @@ module.exports = new GraphQLObjectType({
 		},
 		users: {
 			type: new GraphQLList(userType),
+			args: {
+				authorisation: { type: GraphQLBoolean, default: false }
+			},
+			resolve(parent, { authorisation }) {
+				let args = false;
+				if (authorisation !== undefined) args = authorisation;
+				return User.find({ authorisation: args });
+			}
+		},
+		login: {
+			type: userType,
+			args: {
+				email: { type: new GraphQLNonNull(GraphQLString) },
+				password: { type: new GraphQLNonNull(GraphQLString) }
+			},
 			resolve(parent, args) {
-				return User.find({});
+				return User.login(args);
 			}
 		}
 	}

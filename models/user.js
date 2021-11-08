@@ -11,66 +11,104 @@ const createToken = (id) => {
 };
 
 const userSchema = new Schema({
-	name: {
+	username: {
 		type: String,
 		required: true
 	},
-	email: { type: String, required: true },
-	password: { type: String, required: true },
-	firstname: {
+	email: {
 		type: String,
-		required: true
+		required: [true, "l' email est réquis "]
 	},
-	description: {
+	password: {
 		type: String,
-		default: ""
+		required: [true, "le mot de passe est réquis"]
 	},
-	authorisation: {
-		type: Boolean,
-		default: false
+	phone_number: {
+		type: String,
+		required: [true, "le numero de telephone est réquis"]
 	},
-	links: [
-		{
-			name: { type: String, required: true },
-			link: { type: String, required: true },
-			icon: { type: String, required: true }
-		}
-	]
+	authorisation: { type: Boolean, default: false }
 });
-userSchema.statics.login = async function ({ email, password }) {
+
+userSchema.statics.verify_email = async function ({ email }) {
 	const user = await this.findOne({ email });
-	if (!user) throw new Error("user not found");
-	const verify = bcrypt.compare(password, user.password);
-	if (verify)
-		return new Promise((resolve, reject) => {
-			const token = createToken(user._id);
-			resolve({ ...user._doc, token, password: null });
-		});
-	throw new Error("password incorrecte !!!");
-};
-userSchema.statics.verify = async function (args) {
-	const user = await this.find({ email: args.email });
-	if (user.length === 0) return true;
-	return false;
+	if (!user) return user;
+	throw new Error("Email already existe !!!");
 };
 
-userSchema.statics.adminAuth = function (data) {
-	if (data.email === process.env.USERNAME) return true;
-	else return false;
+/*
+
+verifie si l'utilisateur courant est un administrateur lors du signup
+
+*/
+
+userSchema.statics.is_admin_signup = async function (args) {
+	const { email } = args;
+	if (email === process.env.EMAIL_ADMIN)
+		return { ...args, authorisation: true };
+	else return { ...args, authorisation: false };
 };
+
+/*
+
+verifie si l'utilisateur courant est un administrateur lors du signup
+
+*/
+
 userSchema.statics.signup = async function (args) {
-	const verify = await this.verify(args);
-	if (verify) {
-		if (this.adminAuth(args)) {
-			const salt = await bcrypt.genSalt();
-			const hashpassword = await bcrypt.hash(args.password, salt);
-			const data = { ...args, password: hashpassword };
-			const user = new this(data);
-			return await user.save();
-		} else {
-			throw new Error("vous n'etes pas authoriser d'avoir un compte");
-		}
+	try {
+		await this.verify_email(args);
+
+		const argument = await this.is_admin_signup(args);
+		const { password } = argument;
+
+		//generate salt en password hashed
+
+		const salt = await bcrypt.genSalt();
+		const passwordHashed = await bcrypt.hash(password, salt);
+
+		const newUser = { ...argument, password: passwordHashed };
+		const user = new this(newUser);
+
+		return user.save();
+	} catch (err) {
+		throw err;
 	}
-	throw new Error("user already exist");
 };
+
+userSchema.statics.login = async function ({ email, password }) {
+	try {
+		const [user] = await this.find({ email });
+
+		if (!user) throw new Error("utilisateur inexistant !!!");
+
+		const response = await bcrypt.compare(password, user.password);
+		const token = createToken(user._id);
+
+		await this.is_admin({ ...user._doc, token });
+
+		if (response) return { ...user._doc, token };
+
+		throw new Error("mot de passe incorrecte  !!!");
+	} catch (err) {
+		throw err;
+	}
+};
+
+userSchema.statics.is_admin = async function (args) {
+	const { token } = args;
+	if (token) {
+		try {
+			const { id } = await jwt.verify(token, process.env.SECRETEPASS);
+			const { authorisation } = await this.findById(id);
+			return new Promise((resolve, reject) => {
+				resolve(authorisation);
+			});
+		} catch (err) {
+			throw err;
+		}
+	} else
+		throw new Error("vous n'etes pas un utilisateur de notre application !!!");
+};
+
 module.exports = model("User", userSchema);
