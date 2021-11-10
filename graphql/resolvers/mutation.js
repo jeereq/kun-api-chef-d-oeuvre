@@ -12,13 +12,35 @@ const {
 const User = require("../../models/user");
 const Restaurant = require("../../models/restaurant");
 
-const { userType, restaurantType } = require("../schema");
+const { userType, restaurantType, localisationType } = require("../schema");
 
 const is_admin = require("../../middleware/is_admin");
 
 module.exports = new GraphQLObjectType({
 	name: "RootMutationType",
 	fields: {
+		restaurant_update: {
+			type: restaurantType,
+			args: {
+				id: { type: GraphQLID },
+				name: { type: GraphQLString },
+				email: { type: GraphQLString },
+				phone_number: { type: GraphQLString },
+				profil_image: { type: GraphQLString }
+			},
+			resolve(parent, args) {
+				return Restaurant.findByIdAndUpdate(args.id, { ...args })
+					.then((data) => {
+						if (data !== null) return { ...data };
+						throw new Error(
+							"restaurant non enregistrer sur notre plateforme !!!!"
+						);
+					})
+					.catch((err) => {
+						throw err;
+					});
+			}
+		},
 		signup: {
 			type: new GraphQLNonNull(userType),
 			args: {

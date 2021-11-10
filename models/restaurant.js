@@ -64,6 +64,17 @@ restaurantSchema.statics.signup = async function (args) {
 		throw err;
 	}
 };
+restaurantSchema.statics.restaurant_exist = async function (id) {
+	return this.findById(id)
+		.then((data) => {
+			return new Promise((resolve, reject) => {
+				data === null ? resolve(false) : resolve(true);
+			});
+		})
+		.catch((err) => {
+			throw err;
+		});
+};
 restaurantSchema.statics.is_restaurant = async function (args) {
 	const { token } = args;
 	if (token) {

@@ -73,6 +73,7 @@ module.exports = new GraphQLObjectType({
 					});
 			}
 		},
+		
 		restaurants: {
 			type: new GraphQLList(restaurantType),
 			resolve(parent, args) {
