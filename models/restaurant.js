@@ -30,6 +30,7 @@ const restaurantSchema = new Schema({
 	profil_image: { type: String },
 	images: [String],
 	likes: [Schema.Types.ObjectId],
+	active: { type: Boolean, default: true },
 	localisations: [
 		{
 			longitude: { type: Number },
@@ -37,6 +38,7 @@ const restaurantSchema = new Schema({
 		}
 	]
 });
+
 restaurantSchema.statics.verify_email = async function ({ email }) {
 	const user = await this.findOne({ email });
 	if (!user) return user;
@@ -62,7 +64,7 @@ restaurantSchema.statics.signup = async function (args) {
 		throw err;
 	}
 };
-userSchema.statics.is_restaurant = async function (args) {
+restaurantSchema.statics.is_restaurant = async function (args) {
 	const { token } = args;
 	if (token) {
 		try {

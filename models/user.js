@@ -27,6 +27,7 @@ const userSchema = new Schema({
 		type: String,
 		required: [true, "le numero de telephone est réquis"]
 	},
+	active: { type: Boolean, default: true },
 	authorisation: { type: Boolean, default: false }
 });
 
