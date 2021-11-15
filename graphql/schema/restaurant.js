@@ -10,7 +10,7 @@ const {
 const localisationType = require("./localisation");
 const likeRestaurantType = require("./like_restaurant");
 
-const Like = require("../../models/like_restaurant");
+const LikeRestaurant = require("../../models/like_restaurant");
 
 module.exports = new GraphQLObjectType({
 	name: "restaurant",
@@ -25,7 +25,7 @@ module.exports = new GraphQLObjectType({
 		likes: {
 			type: new GraphQLList(likeRestaurantType),
 			resolve(parent, args) {
-				return Like.find({ restaurant_id: parent._id }).limit(10);
+				return LikeRestaurant.find({ restaurant_id: parent._id });
 			}
 		},
 		localisations: { type: new GraphQLList(localisationType) },

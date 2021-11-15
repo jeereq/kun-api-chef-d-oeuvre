@@ -13,7 +13,7 @@ const Meal = require("../../models/meal");
 const User = require("../../models/user");
 
 module.exports = new GraphQLObjectType({
-	name: "RemarkMeal",
+	name: "remarkMeal",
 	fields: () => ({
 		_id: { type: GraphQLID },
 		user_id: {

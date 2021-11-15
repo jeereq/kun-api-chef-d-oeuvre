@@ -1,4 +1,9 @@
-const { GraphQLObjectType, GraphQLNonNull, GraphQLID } = require("graphql");
+const {
+	GraphQLObjectType,
+	GraphQLNonNull,
+	GraphQLID,
+	GraphQLString
+} = require("graphql");
 
 const restaurantType = require("./restaurant");
 const userType = require("./user");
@@ -11,16 +16,13 @@ module.exports = new GraphQLObjectType({
 	fields: () => ({
 		_id: { type: GraphQLID },
 		user_id: {
-			type: restaurantType,
+			type: userType,
 			resolve(parent) {
-				return Restaurant.findById(parent.user_id);
+				return User.findById(parent.user_id);
 			}
 		},
 		restaurant_id: {
-			type: userType,
-			resolve(parent) {
-				return User.findById(parent.restaurant_id);
-			}
+			type: GraphQLString
 		}
 	})
 });

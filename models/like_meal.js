@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const likeMeatSchema = new Schema({
+const likeMealSchema = new Schema({
 	user_id: {
 		type: Schema.Types.ObjectId
 	},
@@ -9,4 +9,5 @@ const likeMeatSchema = new Schema({
 	}
 });
 
-module.exports = model("LikeMeal", likeMeatSchema);
+
+module.exports = model("LikeMeal", likeMealSchema);
