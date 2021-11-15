@@ -2,8 +2,6 @@ const {
 	GraphQLObjectType,
 	GraphQLString,
 	GraphQLID,
-	GraphQLInt,
-	GraphQLList,
 	GraphQLNonNull,
 	GraphQLBoolean
 } = require("graphql");
@@ -17,6 +15,9 @@ module.exports = new GraphQLObjectType({
 		password: { type: new GraphQLNonNull(GraphQLString) },
 		phone_number: { type: new GraphQLNonNull(GraphQLString) },
 		authorisation: { type: GraphQLBoolean },
+		active: { type: GraphQLBoolean },
+		createdAt: { type: GraphQLString },
+		updatedAt: { type: GraphQLString },
 		token: { type: GraphQLString }
 	})
 });

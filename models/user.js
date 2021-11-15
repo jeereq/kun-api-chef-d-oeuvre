@@ -2,6 +2,14 @@ const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const {
+	_USER,
+	_ADMIN,
+	_NOT_USER,
+	_NOT_ADMIN,
+	_NOT_TOKEN
+} = require("../utils/constant");
+
 const MaxAge = 1000 * 60 * 60 * 24 * 3650;
 
 const createToken = (id) => {
@@ -10,70 +18,52 @@ const createToken = (id) => {
 	});
 };
 
-const userSchema = new Schema({
-	username: {
-		type: String,
-		required: true
+const userSchema = new Schema(
+	{
+		username: {
+			type: String,
+			required: true
+		},
+		email: {
+			type: String,
+			required: [true, "l' email est réquis "]
+		},
+		password: {
+			type: String,
+			required: [true, "le mot de passe est réquis"]
+		},
+		phone_number: {
+			type: String,
+			required: [true, "le numero de telephone est réquis"]
+		},
+		active: { type: Boolean, default: true },
+		authorisation: { type: Boolean, default: false }
 	},
-	email: {
-		type: String,
-		required: [true, "l' email est réquis "]
-	},
-	password: {
-		type: String,
-		required: [true, "le mot de passe est réquis"]
-	},
-	phone_number: {
-		type: String,
-		required: [true, "le numero de telephone est réquis"]
-	},
-	active: { type: Boolean, default: true },
-	authorisation: { type: Boolean, default: false }
-});
+	{
+		timestamps: true
+	}
+);
 
-userSchema.statics.verify_email = async function ({ email }) {
-	const user = await this.findOne({ email });
-	if (!user) return user;
-	throw new Error("Email already existe !!!");
-};
-
-/*
-
-verifie si l'utilisateur courant est un administrateur lors du signup
-
-*/
-
-userSchema.statics.is_admin_signup = async function (args) {
-	const { email } = args;
-	if (email === process.env.EMAIL_ADMIN)
-		return { ...args, authorisation: true };
-	else return { ...args, authorisation: false };
-};
-
-/*
-
-verifie si l'utilisateur courant est un administrateur lors du signup
-
-*/
-
-userSchema.statics.signup = async function (args) {
+userSchema.statics.is_user = async function (token) {
 	try {
-		await this.verify_email(args);
-
-		const argument = await this.is_admin_signup(args);
-		const { password } = argument;
-
-		//generate salt en password hashed
-
-		const salt = await bcrypt.genSalt();
-		const passwordHashed = await bcrypt.hash(password, salt);
-
-		const newUser = { ...argument, password: passwordHashed };
-		const user = new this(newUser);
-
-		return user.save();
+		const { id } = await jwt.verify(token, process.env.SECRETEPASS);
+		return await this.findById(id).then((data) => {
+			if (data)
+				return data.authorisation === true
+					? new Promise((resolve, reject) => {
+							resolve({ type: [false, _ADMIN], id: id });
+					  })
+					: new Promise((resolve, reject) => {
+							resolve({ type: [_USER, false], id: id });
+					  });
+			return new Promise((resolve, reject) => {
+				resolve({ type: [_NOT_USER, _NOT_ADMIN], id: null });
+			});
+		});
 	} catch (err) {
-		throw err;
+		return new Promise((resolve, reject) => {
+			reject(_NOT_TOKEN);
+		});
 	}
 };
 
@@ -95,21 +85,48 @@ userSchema.statics.login = async function ({ email, password }) {
 		throw err;
 	}
 };
+userSchema.statics.verify_email = async function ({ email }) {
+	const user = await this.findOne({ email });
+	if (!user) return user;
+	throw new Error("Email already existe !!!");
+};
 
-userSchema.statics.is_admin = async function (args) {
-	const { token } = args;
-	if (token) {
-		try {
-			const { id } = await jwt.verify(token, process.env.SECRETEPASS);
-			const { authorisation } = await this.findById(id);
-			return new Promise((resolve, reject) => {
-				resolve(authorisation);
-			});
-		} catch (err) {
-			throw err;
-		}
-	} else
-		throw new Error("vous n'etes pas un utilisateur de notre application !!!");
+userSchema.statics.signup = async function (args) {
+	try {
+		await this.verify_email(args);
+
+		const argument = await this.is_admin_signup(args);
+		const { password } = argument;
+
+		//generate salt en password hashed
+
+		const salt = await bcrypt.genSalt();
+		const passwordHashed = await bcrypt.hash(password, salt);
+
+		const newUser = { ...argument, password: passwordHashed };
+		const user = new this(newUser);
+
+		return user.save();
+	} catch (err) {
+		throw err;
+	}
+};
+userSchema.statics.is_admin_signup = async function (args) {
+	const { email } = args;
+	if (email === process.env.EMAIL_ADMIN)
+		return { ...args, authorisation: true };
+	else return { ...args, authorisation: false };
+};
+userSchema.statics.desactive = async function (id) {
+	return await this.findByIdAndUpdate(id, { active: false }).then((data) => {
+		return data;
+	});
+};
+
+userSchema.statics.active = async function ({ id }) {
+	return this.findByIdAndUpdate(id, { active: true }).then((data) => {
+		return data;
+	});
 };
 
 module.exports = model("User", userSchema);

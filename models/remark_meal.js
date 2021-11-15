@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const remarkRestaurantSchema = new Schema(
+const remarkMeatSchema = new Schema(
 	{
 		message: {
 			type: String,
@@ -9,7 +9,7 @@ const remarkRestaurantSchema = new Schema(
 		user_id: {
 			type: Schema.Types.ObjectId
 		},
-		restaurant_id: {
+		meal_id: {
 			type: Schema.Types.ObjectId
 		}
 	},
@@ -18,4 +18,4 @@ const remarkRestaurantSchema = new Schema(
 	}
 );
 
-module.exports = model("RemarkRestaurant", remarkRestaurantSchema);
+module.exports = model("RemarkMeal", remarkMeatSchema);
