@@ -2,7 +2,7 @@ const { GraphQLID, GraphQLList, GraphQLNonNull } = require("graphql");
 
 const Meal = require("../../../models/meal");
 
-const { mealType } = require("../../schema");
+const { mealType } = require("../../schemas");
 const { is_authenticate } = require("../../../utils/function");
 
 module.exports = {

@@ -14,7 +14,7 @@ const Meal = require("../../../models/meal");
 
 const { is_authenticate } = require("../../../utils/function");
 
-const { restaurantType } = require("../../schema");
+const { restaurantType } = require("../../schemas");
 
 module.exports = {
 	restaurant: {

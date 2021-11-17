@@ -12,7 +12,7 @@ const User = require("../../../models/user");
 const Restaurant = require("../../../models/restaurant");
 const Meal = require("../../../models/meal");
 
-const { userType } = require("../../schema");
+const { userType } = require("../../schemas");
 
 const { is_authenticate } = require("../../../utils/function");
 

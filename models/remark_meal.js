@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 
-const remarkMeatSchema = new Schema(
+const Meal = require("./meal");
+
+const remarkMealSchema = new Schema(
 	{
 		message: {
 			type: String,
@@ -18,4 +20,10 @@ const remarkMeatSchema = new Schema(
 	}
 );
 
-module.exports = model("RemarkMeal", remarkMeatSchema);
+remarkMealSchema.statics.create_remark = async function (args) {
+	await Meal.exist(args.meal_id);
+	const remark = new this(args);
+	return remark.save();
+};
+
+module.exports = model("RemarkMeal", remarkMealSchema);

@@ -26,6 +26,12 @@ mealSchema.statics.verify_name = async function ({ name }) {
 	throw new Error("plat already existe !!!");
 };
 
+mealSchema.statics.exist = async function (id) {
+	const meal = await this.findById(id);
+	if (meal) return meal;
+	throw new Error("le plat n'existe pas !!!");
+};
+
 mealSchema.statics.create = async function (args) {
 	try {
 		await this.verify_name(args);
