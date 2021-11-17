@@ -4,16 +4,15 @@ const {
 	GraphQLID,
 	GraphQLList,
 	GraphQLNonNull,
-	GraphQLBoolean
-} = require("graphql");
+	GraphQLBoolean,
+} = require('graphql');
 
-const restaurantType = require("./restaurant");
+const restaurantType = require('./restaurant');
 
-const Meal = require("../../models/meal");
-const Restaurant = require("../../models/restaurant");
+const Restaurant = require('../../models/restaurant');
 
 module.exports = new GraphQLObjectType({
-	name: "meal",
+	name: 'meal',
 	fields: () => ({
 		_id: { type: GraphQLID },
 		name: { type: new GraphQLNonNull(GraphQLString) },
@@ -26,9 +25,9 @@ module.exports = new GraphQLObjectType({
 			type: restaurantType,
 			resolve(parent) {
 				return Restaurant.findById(parent.restaurant_id);
-			}
+			},
 		},
 		createdAt: { type: GraphQLString },
-		updatedAt: { type: GraphQLString }
-	})
+		updatedAt: { type: GraphQLString },
+	}),
 });

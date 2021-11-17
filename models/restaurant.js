@@ -1,17 +1,18 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const process = require('process');
 const {
 	_RESTAURANT,
 	_NOT_RESTAURANT,
-	_NOT_TOKEN
-} = require("../utils/constant");
+	_NOT_TOKEN,
+} = require('../utils/constant');
 
 const MaxAge = 1000 * 60 * 60 * 24 * 3650;
 
 const createToken = (id) => {
 	return jwt.sign({ id }, process.env.SECRETEPASS, {
-		expiresIn: MaxAge
+		expiresIn: MaxAge,
 	});
 };
 
@@ -19,19 +20,19 @@ const restaurantSchema = new Schema(
 	{
 		name: {
 			type: String,
-			required: true
+			required: true,
 		},
 		email: {
 			type: String,
-			required: true
+			required: true,
 		},
 		password: {
 			type: String,
-			required: true
+			required: true,
 		},
 		phone_number: {
 			type: String,
-			required: true
+			required: true,
 		},
 		profil_image: { type: String },
 		images: [String],
@@ -39,24 +40,20 @@ const restaurantSchema = new Schema(
 		localisations: [
 			{
 				longitude: { type: Number },
-				latitude: { type: Number }
-			}
-		]
+				latitude: { type: Number },
+			},
+		],
 	},
 	{
-		timestamps: true
+		timestamps: true,
 	}
 );
 
 restaurantSchema.statics.is_restaurant_by_id = async function ({ id }) {
-	try {
-		const restaurant = await this.findById(id);
-		return new Promise((resolve, reject) => {
-			resolve(restaurant);
-		});
-	} catch (err) {
-		throw err;
-	}
+	const restaurant = await this.findById(id);
+	return new Promise((resolve) => {
+		resolve(restaurant);
+	});
 };
 
 restaurantSchema.statics.is_restaurant = async function (token) {
@@ -64,11 +61,11 @@ restaurantSchema.statics.is_restaurant = async function (token) {
 		const { id } = await jwt.verify(token, process.env.SECRETEPASS);
 		return await this.findById(id).then((data) => {
 			if (data)
-				return new Promise((resolve, reject) => {
+				return new Promise((resolve) => {
 					resolve({ type: [_RESTAURANT], id: id });
 				});
 			else
-				return new Promise((resolve, reject) => {
+				return new Promise((resolve) => {
 					resolve({ type: [_NOT_RESTAURANT], id: null });
 				});
 		});
@@ -79,28 +76,24 @@ restaurantSchema.statics.is_restaurant = async function (token) {
 	}
 };
 restaurantSchema.statics.login = async function ({ email, password }) {
-	try {
-		const [restaurant] = await this.find({ email });
+	const [restaurant] = await this.find({ email });
 
-		if (!restaurant) throw new Error("restaurant inexistant !!!");
+	if (!restaurant) throw new Error('restaurant inexistant !!!');
 
-		const response = await bcrypt.compare(password, restaurant.password);
-		const token = createToken(restaurant._id);
+	const response = await bcrypt.compare(password, restaurant.password);
+	const token = createToken(restaurant._id);
 
-		await this.is_restaurant({ ...restaurant._doc, token });
+	await this.is_restaurant({ ...restaurant._doc, token });
 
-		if (response) return { ...restaurant._doc, token };
+	if (response) return { ...restaurant._doc, token };
 
-		throw new Error("mot de passe incorrecte  !!!");
-	} catch (err) {
-		throw err;
-	}
+	throw new Error('mot de passe incorrecte  !!!');
 };
 
 restaurantSchema.statics.verify_email = async function ({ email }) {
 	const user = await this.findOne({ email });
 	if (!user) return user;
-	throw new Error("Email already existe !!!");
+	throw new Error('Email already existe !!!');
 };
 restaurantSchema.statics.signup = async function (args) {
 	try {
@@ -132,4 +125,4 @@ restaurantSchema.statics.desactive = async function (id) {
 	});
 };
 
-module.exports = model("Restaurant", restaurantSchema);
+module.exports = model('Restaurant', restaurantSchema);

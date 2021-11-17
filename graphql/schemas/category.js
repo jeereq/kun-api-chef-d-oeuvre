@@ -3,16 +3,14 @@ const {
 	GraphQLString,
 	GraphQLID,
 	GraphQLList,
-	GraphQLNonNull
-} = require("graphql");
-
-const restaurantType = require("./restaurant");
+	GraphQLNonNull,
+} = require('graphql');
 
 module.exports = new GraphQLObjectType({
-	name: "category",
+	name: 'category',
 	fields: () => ({
 		_id: { type: GraphQLID },
 		name: { type: new GraphQLNonNull(GraphQLString) },
-		meals: { type: new GraphQLList(GraphQLString) }
-	})
+		meals: { type: new GraphQLList(GraphQLString) },
+	}),
 });

@@ -1,3 +1,5 @@
+/*eslint no-undef: "off"*/
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
@@ -13,8 +15,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/', (req, res, next) => {
-	res.send('<h1> kun api par minganda ibanga jeereq</h1>);
+app.get('/', (req, res) => {
+	res.send('<h1> kun api par minganda ibanga jeereq</h1>');
 });
 
 //middleware d'authentification

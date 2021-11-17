@@ -1,20 +1,22 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+/* eslint-disable no-undef */
+/* eslint-disable no-mixed-spaces-and-tabs */
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const {
 	_USER,
 	_ADMIN,
 	_NOT_USER,
 	_NOT_ADMIN,
-	_NOT_TOKEN
-} = require("../utils/constant");
+	_NOT_TOKEN,
+} = require('../utils/constant');
 
 const MaxAge = 1000 * 60 * 60 * 24 * 3650;
 
 const createToken = (id) => {
 	return jwt.sign({ id }, process.env.SECRETEPASS, {
-		expiresIn: MaxAge
+		expiresIn: MaxAge,
 	});
 };
 
@@ -22,25 +24,25 @@ const userSchema = new Schema(
 	{
 		username: {
 			type: String,
-			required: true
+			required: true,
 		},
 		email: {
 			type: String,
-			required: [true, "l' email est réquis "]
+			required: [true, "l' email est réquis "],
 		},
 		password: {
 			type: String,
-			required: [true, "le mot de passe est réquis"]
+			required: [true, 'le mot de passe est réquis'],
 		},
 		phone_number: {
 			type: String,
-			required: [true, "le numero de telephone est réquis"]
+			required: [true, 'le numero de telephone est réquis'],
 		},
 		active: { type: Boolean, default: true },
-		authorisation: { type: Boolean, default: false }
+		authorisation: { type: Boolean, default: false },
 	},
 	{
-		timestamps: true
+		timestamps: true,
 	}
 );
 
@@ -50,13 +52,13 @@ userSchema.statics.is_user = async function (token) {
 		return await this.findById(id).then((data) => {
 			if (data)
 				return data.authorisation === true
-					? new Promise((resolve, reject) => {
+					? new Promise((resolve) => {
 							resolve({ type: [false, _ADMIN], id: id });
 					  })
-					: new Promise((resolve, reject) => {
+					: new Promise((resolve) => {
 							resolve({ type: [_USER, false], id: id });
 					  });
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				resolve({ type: [_NOT_USER, _NOT_ADMIN], id: null });
 			});
 		});
@@ -68,48 +70,40 @@ userSchema.statics.is_user = async function (token) {
 };
 
 userSchema.statics.login = async function ({ email, password }) {
-	try {
-		const [user] = await this.find({ email });
+	const [user] = await this.find({ email });
 
-		if (!user) throw new Error("utilisateur inexistant !!!");
+	if (!user) throw new Error('utilisateur inexistant !!!');
 
-		const response = await bcrypt.compare(password, user.password);
-		const token = createToken(user._id);
+	const response = await bcrypt.compare(password, user.password);
+	const token = createToken(user._id);
 
-		await this.is_admin({ ...user._doc, token });
+	await this.is_admin({ ...user._doc, token });
 
-		if (response) return { ...user._doc, token };
+	if (response) return { ...user._doc, token };
 
-		throw new Error("mot de passe incorrecte  !!!");
-	} catch (err) {
-		throw err;
-	}
+	throw new Error('mot de passe incorrecte  !!!');
 };
 userSchema.statics.verify_email = async function ({ email }) {
 	const user = await this.findOne({ email });
 	if (!user) return user;
-	throw new Error("Email already existe !!!");
+	throw new Error('Email already existe !!!');
 };
 
 userSchema.statics.signup = async function (args) {
-	try {
-		await this.verify_email(args);
+	await this.verify_email(args);
 
-		const argument = await this.is_admin_signup(args);
-		const { password } = argument;
+	const argument = await this.is_admin_signup(args);
+	const { password } = argument;
 
-		//generate salt en password hashed
+	//generate salt en password hashed
 
-		const salt = await bcrypt.genSalt();
-		const passwordHashed = await bcrypt.hash(password, salt);
+	const salt = await bcrypt.genSalt();
+	const passwordHashed = await bcrypt.hash(password, salt);
 
-		const newUser = { ...argument, password: passwordHashed };
-		const user = new this(newUser);
+	const newUser = { ...argument, password: passwordHashed };
+	const user = new this(newUser);
 
-		return user.save();
-	} catch (err) {
-		throw err;
-	}
+	return user.save();
 };
 userSchema.statics.is_admin_signup = async function (args) {
 	const { email } = args;
@@ -129,4 +123,4 @@ userSchema.statics.active = async function ({ id }) {
 	});
 };
 
-module.exports = model("User", userSchema);
+module.exports = model('User', userSchema);

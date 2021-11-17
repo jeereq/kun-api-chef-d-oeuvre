@@ -4,16 +4,16 @@ const {
 	GraphQLID,
 	GraphQLList,
 	GraphQLNonNull,
-	GraphQLBoolean
-} = require("graphql");
+	GraphQLBoolean,
+} = require('graphql');
 
-const localisationType = require("./localisation");
-const likeRestaurantType = require("./like_restaurant");
+const localisationType = require('./localisation');
+const likeRestaurantType = require('./like_restaurant');
 
-const LikeRestaurant = require("../../models/like_restaurant");
+const LikeRestaurant = require('../../models/like_restaurant');
 
 module.exports = new GraphQLObjectType({
-	name: "restaurant",
+	name: 'restaurant',
 	fields: () => ({
 		_id: { type: GraphQLID },
 		name: { type: new GraphQLNonNull(GraphQLString) },
@@ -24,12 +24,12 @@ module.exports = new GraphQLObjectType({
 		images: { type: new GraphQLList(GraphQLString) },
 		likes: {
 			type: new GraphQLList(likeRestaurantType),
-			resolve(parent, args) {
+			resolve(parent) {
 				return LikeRestaurant.find({ restaurant_id: parent._id });
-			}
+			},
 		},
 		localisations: { type: new GraphQLList(localisationType) },
 		token: { type: GraphQLString },
-		active: { type: new GraphQLNonNull(GraphQLBoolean) }
-	})
+		active: { type: new GraphQLNonNull(GraphQLBoolean) },
+	}),
 });
