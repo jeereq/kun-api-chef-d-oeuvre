@@ -43,6 +43,7 @@ const restaurantSchema = new Schema(
 				latitude: { type: Number },
 			},
 		],
+		themes: [String],
 	},
 	{
 		timestamps: true,
