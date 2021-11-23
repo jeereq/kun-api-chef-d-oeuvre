@@ -2,7 +2,7 @@ const { GraphQLString, GraphQLID, GraphQLNonNull } = require('graphql');
 
 const Restaurant = require('../../../models/restaurant');
 
-const { userType, restaurantType } = require('../../schema');
+const { userType, restaurantType } = require('../../schemas');
 
 const { _NOT_ADMIN, _NOT_RESTAURANT } = require('../../../utils/constant');
 

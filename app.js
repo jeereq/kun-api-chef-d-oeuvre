@@ -1,5 +1,4 @@
-/*eslint no-undef: "off"*/
-
+const process = require('process');
 const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
@@ -8,7 +7,7 @@ const cors = require('cors');
 
 const schema = require('./graphql/resolvers');
 
-const is_auth = require('./middleware/is_auth');
+const is_auth = require('./middlewares/is_auth');
 
 const app = express();
 

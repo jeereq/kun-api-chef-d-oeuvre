@@ -2,7 +2,7 @@ const { GraphQLID, GraphQLNonNull, GraphQLString } = require('graphql');
 
 const RemarkMeal = require('../../../models/remark_meal');
 
-const { likeRestaurantType } = require('../../schema');
+const { likeRestaurantType } = require('../../schemas');
 
 const { is_authenticate } = require('../../../utils/function');
 

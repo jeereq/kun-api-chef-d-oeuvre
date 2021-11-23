@@ -2,7 +2,7 @@ const { GraphQLString, GraphQLNonNull, GraphQLID } = require("graphql");
 
 const User = require("../../../models/user");
 
-const { userType } = require("../../schema");
+const { userType } = require('../../schemas');
 
 const { _NOT_USER, _NOT_ADMIN } = require("../../../utils/constant");
 

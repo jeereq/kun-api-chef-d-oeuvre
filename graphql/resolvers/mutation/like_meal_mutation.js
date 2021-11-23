@@ -2,7 +2,7 @@ const { GraphQLID, GraphQLNonNull } = require('graphql');
 
 const LikeMeal = require('../../../models/like_meal');
 
-const { likeMealType } = require('../../schema');
+const { likeMealType } = require('../../schemas');
 
 const { _NOT_RESTAURANT } = require('../../../utils/constant');
 

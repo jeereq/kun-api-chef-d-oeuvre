@@ -7,7 +7,7 @@ const {
 
 const Meal = require('../../../models/meal');
 
-const { mealType } = require('../../schema');
+const { mealType } = require('../../schemas');
 
 const { _NOT_RESTAURANT } = require('../../../utils/constant');
 const { is_authenticate } = require('../../../utils/function');
