@@ -1,4 +1,4 @@
-const { _NOT_TOKEN } = require("./constant");
+const { _NOT_TOKEN } = require('./constant');
 
 module.exports = {
 	//prends en parametre un callback ainsi que le context courant de l'application ou les elements de la requete
@@ -14,5 +14,5 @@ module.exports = {
 		)
 			throw new Error(_NOT_TOKEN);
 		else return await callback(authentification);
-	}
+	},
 };

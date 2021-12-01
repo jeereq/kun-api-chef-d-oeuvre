@@ -9,8 +9,10 @@ const {
 
 const localisationType = require('./localisation');
 const likeRestaurantType = require('./like_restaurant');
+const themeType = require('./theme');
 
 const LikeRestaurant = require('../../models/like_restaurant');
+const Theme = require('../../models/theme');
 
 module.exports = new GraphQLObjectType({
 	name: 'restaurant',
@@ -26,6 +28,12 @@ module.exports = new GraphQLObjectType({
 			type: new GraphQLList(likeRestaurantType),
 			resolve(parent) {
 				return LikeRestaurant.find({ restaurant_id: parent._id });
+			},
+		},
+		themes: {
+			type: new GraphQLNonNull(themeType),
+			resolve() {
+				return Theme.find({});
 			},
 		},
 		localisations: { type: new GraphQLList(localisationType) },

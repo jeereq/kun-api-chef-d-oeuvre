@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const Restaurant = require("../models/restaurant");
+const User = require('../models/user');
+const Restaurant = require('../models/restaurant');
 
 //constante à utiliser dans l'application
 
@@ -9,8 +9,8 @@ const {
 	_RESTAURANT,
 	_NOT_USER,
 	_NOT_ADMIN,
-	_NOT_RESTAURANT
-} = require("../utils/constant");
+	_NOT_RESTAURANT,
+} = require('../utils/constant');
 
 module.exports = function (req, res, next) {
 	const { token } = req.headers;
@@ -20,7 +20,7 @@ module.exports = function (req, res, next) {
 		is_admin: false,
 		is_restaurant: false,
 		is_auth: false,
-		id: null
+		id: null,
 	};
 
 	Restaurant.is_restaurant(token)
@@ -43,8 +43,10 @@ module.exports = function (req, res, next) {
 
 			if (ADMIN === _NOT_ADMIN) authentification.is_admin = ADMIN;
 
-			if (authentification.id === null) authentification.id = id;
-			else authentification.is_auth = true;
+			if (authentification.id === null) {
+				authentification.id = id;
+				authentification.is_auth = true;
+			} else authentification.is_auth = false;
 
 			req.authentification = authentification;
 			next();

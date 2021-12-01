@@ -38,6 +38,14 @@ const userSchema = new Schema(
 			type: String,
 			required: [true, 'le numero de telephone est réquis'],
 		},
+		genre: {
+			type: String,
+			maxLength: 2,
+		},
+		image_profile: {
+			type: String,
+			default: '',
+		},
 		active: { type: Boolean, default: true },
 		authorisation: { type: Boolean, default: false },
 	},
@@ -46,6 +54,7 @@ const userSchema = new Schema(
 	}
 );
 
+userSchema.statics.is_admin = async function () {};
 userSchema.statics.is_user = async function (token) {
 	try {
 		const { id } = await jwt.verify(token, process.env.SECRETEPASS);
@@ -75,13 +84,11 @@ userSchema.statics.login = async function ({ email, password }) {
 	if (!user) throw new Error('utilisateur inexistant !!!');
 
 	const response = await bcrypt.compare(password, user.password);
-	const token = createToken(user._id);
+	const token = await createToken(user._id);
 
-	await this.is_admin({ ...user._doc, token });
+	if (response === false) throw new Error('mot de passe incorrecte  !!!');
 
-	if (response) return { ...user._doc, token };
-
-	throw new Error('mot de passe incorrecte  !!!');
+	return { ...user._doc, token };
 };
 userSchema.statics.verify_email = async function ({ email }) {
 	const user = await this.findOne({ email });
@@ -101,7 +108,9 @@ userSchema.statics.signup = async function (args) {
 	const passwordHashed = await bcrypt.hash(password, salt);
 
 	const newUser = { ...argument, password: passwordHashed };
-	const user = new this(newUser);
+	const user = new this(newUser).then((data) => {
+		return data;
+	});
 
 	return user.save();
 };
