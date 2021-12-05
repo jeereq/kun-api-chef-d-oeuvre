@@ -21,17 +21,16 @@ module.exports = new GraphQLObjectType({
 	fields: () => ({
 		length: {
 			type: new GraphQLNonNull(GraphQLInt),
-			resolve(parent, args, request) {
+			resolve() {
 				return Restaurant.find({}).then((data) => {
-					console.log(data);
-					return 1;
+					return data.length;
 				});
 			},
 		},
 		top: {
 			type: new GraphQLList(restaurantType),
-			resolve(parent, args, request) {
-				return;
+			resolve() {
+				return Restaurant.find();
 			},
 		},
 	}),

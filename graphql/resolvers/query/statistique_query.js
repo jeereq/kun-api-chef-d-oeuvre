@@ -29,6 +29,7 @@ module.exports = {
 						(await User.find({ authorisation: false }).then(
 							(data) => data.length
 						)) + (await Restaurant.find({}).then((data) => data.length)),
+					restaurant: {},
 				};
 				if (is_auth) return obj;
 			},
