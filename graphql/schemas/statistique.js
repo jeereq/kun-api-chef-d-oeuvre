@@ -1,10 +1,25 @@
-const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require('graphql');
+const {
+	GraphQLObjectType,
+	GraphQLString,
+	GraphQLNonNull,
+	GraphQLInt,
+} = require('graphql');
+
+//schemas
+
+const usersStatistiquesType = require('./users_statistiques');
+const restaurantsStatistiquesType = require('./restaurants_statistiques');
 
 module.exports = new GraphQLObjectType({
 	name: 'statistique',
 	fields: () => ({
-		users: { type: new GraphQLNonNull(GraphQLString) },
-		restaurants: { type: new GraphQLNonNull(GraphQLString) },
-		total: { type: new GraphQLNonNull(GraphQLString) },
+		user: { type: new GraphQLNonNull(usersStatistiquesType) },
+		restaurant: { type: new GraphQLNonNull(restaurantsStatistiquesType) },
+		total: { type: new GraphQLNonNull(GraphQLInt) },
+		meal: { type: new GraphQLNonNull(GraphQLString) },
+		remark_restaurant: { type: new GraphQLNonNull(GraphQLString) },
+		remark_meal: { type: new GraphQLNonNull(GraphQLString) },
+		like_restaurant: { type: new GraphQLNonNull(GraphQLString) },
+		like_meal: { type: new GraphQLNonNull(GraphQLString) },
 	}),
 });

@@ -1,12 +1,14 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const likeMealSchema = new Schema({
 	user_id: {
-		type: Schema.Types.ObjectId
+		type: Schema.Types.ObjectId,
+		ref: 'User',
 	},
 	meal_id: {
-		type: Schema.Types.ObjectId
-	}
+		type: Schema.Types.ObjectId,
+		ref: 'Meal',
+	},
 });
 
 likeMealSchema.statics.add = async function (args) {
@@ -24,4 +26,4 @@ likeMealSchema.statics.like_dislike = async function (args) {
 	});
 };
 
-module.exports = model("LikeMeal", likeMealSchema);
+module.exports = model('LikeMeal', likeMealSchema);

@@ -3,9 +3,11 @@ const { Schema, model } = require('mongoose');
 const likeRestaurantSchema = new Schema({
 	user_id: {
 		type: Schema.Types.ObjectId,
+		ref: 'User',
 	},
 	restaurant_id: {
 		type: Schema.Types.ObjectId,
+		ref: 'Restauran',
 	},
 });
 likeRestaurantSchema.statics.add = async function (args) {

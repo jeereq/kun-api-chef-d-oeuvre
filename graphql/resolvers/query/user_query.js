@@ -8,7 +8,7 @@ const {
 
 const User = require('../../../models/user');
 
-const { userType } = require('../../schemas');
+const { userType, statistiqueType } = require('../../schemas');
 
 const { is_authenticate } = require('../../../utils/function');
 

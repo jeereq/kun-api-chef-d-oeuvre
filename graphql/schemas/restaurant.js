@@ -7,9 +7,13 @@ const {
 	GraphQLBoolean,
 } = require('graphql');
 
+//schemas
+
 const localisationType = require('./localisation');
 const likeRestaurantType = require('./like_restaurant');
 const themeType = require('./theme');
+
+//models
 
 const LikeRestaurant = require('../../models/like_restaurant');
 const Theme = require('../../models/theme');

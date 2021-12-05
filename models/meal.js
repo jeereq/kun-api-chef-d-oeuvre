@@ -16,6 +16,7 @@ const mealSchema = new Schema(
 		promotion: { type: Boolean, default: false },
 		restaurant_id: {
 			type: Schema.Types.ObjectId,
+			ref: 'Restaurant',
 		},
 		categorys: [String],
 	},

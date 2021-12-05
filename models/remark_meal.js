@@ -1,22 +1,24 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
-const Meal = require("./meal");
+const Meal = require('./meal');
 
 const remarkMealSchema = new Schema(
 	{
 		message: {
 			type: String,
-			required: true
+			required: true,
 		},
 		user_id: {
-			type: Schema.Types.ObjectId
+			type: Schema.Types.ObjectId,
+			ref: 'User',
 		},
 		meal_id: {
-			type: Schema.Types.ObjectId
-		}
+			type: Schema.Types.ObjectId,
+			ref: 'Meal',
+		},
 	},
 	{
-		timestamps: true
+		timestamps: true,
 	}
 );
 
@@ -26,4 +28,4 @@ remarkMealSchema.statics.create_remark = async function (args) {
 	return remark.save();
 };
 
-module.exports = model("RemarkMeal", remarkMealSchema);
+module.exports = model('RemarkMeal', remarkMealSchema);

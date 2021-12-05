@@ -1,11 +1,11 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const ThemeSchema = new Schema({
 	name: {
 		type: String,
-		required: true
+		required: true,
 	},
-	restaurants: [Schema.Types.ObjectId]
+	restaurants: [{ type: Schema.Types.ObjectId, ref: 'Restaurant' }],
 });
 
-module.exports = model("Theme", ThemeSchema);
+module.exports = model('Theme', ThemeSchema);

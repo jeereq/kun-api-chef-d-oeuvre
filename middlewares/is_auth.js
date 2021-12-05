@@ -43,10 +43,11 @@ module.exports = function (req, res, next) {
 
 			if (ADMIN === _NOT_ADMIN) authentification.is_admin = ADMIN;
 
-			if (authentification.id === null) {
-				authentification.id = id;
-				authentification.is_auth = true;
-			} else authentification.is_auth = false;
+			if (authentification.id === null) authentification.id = id;
+
+			if (authentification.id !== null) authentification.is_auth = true;
+
+			console.log(authentification);
 
 			req.authentification = authentification;
 			next();

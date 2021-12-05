@@ -15,7 +15,7 @@ module.exports = new GraphQLObjectType({
 		password: { type: new GraphQLNonNull(GraphQLString) },
 		phone_number: { type: new GraphQLNonNull(GraphQLString) },
 		image_profile: { type: new GraphQLNonNull(GraphQLString) },
-		genre: { type: new GraphQLNonNull(GraphQLString) },
+		genre: { type: new GraphQLNonNull(GraphQLString) },																							
 		authorisation: { type: GraphQLBoolean },
 		active: { type: GraphQLBoolean },
 		createdAt: { type: GraphQLString },

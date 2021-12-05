@@ -1,21 +1,23 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose');
 
 const remarkRestaurantSchema = new Schema(
 	{
 		message: {
 			type: String,
-			required: true
+			required: true,
 		},
 		user_id: {
-			type: Schema.Types.ObjectId
+			type: Schema.Types.ObjectId,
+			ref: 'User',
 		},
 		restaurant_id: {
-			type: Schema.Types.ObjectId
-		}
+			type: Schema.Types.ObjectId,
+			ref: 'Restaurant',
+		},
 	},
 	{
-		timestamps: true
+		timestamps: true,
 	}
 );
 
-module.exports = model("RemarkRestaurant", remarkRestaurantSchema);
+module.exports = model('RemarkRestaurant', remarkRestaurantSchema);
