@@ -13,6 +13,7 @@ module.exports = {
 			is_restaurant === _NOT_TOKEN
 		)
 			throw new Error(_NOT_TOKEN);
-		else return await callback(authentification);
+
+		return await callback(authentification);
 	},
 };

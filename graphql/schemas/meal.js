@@ -10,6 +10,7 @@ const {
 const restaurantType = require('./restaurant');
 
 const Restaurant = require('../../models/restaurant');
+const Category = require('../../models/category');
 
 module.exports = new GraphQLObjectType({
 	name: 'meal',
@@ -25,6 +26,12 @@ module.exports = new GraphQLObjectType({
 			type: restaurantType,
 			resolve(parent) {
 				return Restaurant.findById(parent.restaurant_id);
+			},
+		},
+		categorys: {
+			type: new GraphQLList(GraphQLString),
+			resolve() {
+				return Category.find({});
 			},
 		},
 		createdAt: { type: GraphQLString },

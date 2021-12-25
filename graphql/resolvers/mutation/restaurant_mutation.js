@@ -73,4 +73,24 @@ module.exports = {
 			}, request);
 		},
 	},
+	update_restaurant: {
+		type: userType,
+		args: {
+			username: { type: GraphQLString },
+			email: { type: GraphQLString },
+			phone_number: { type: GraphQLString },
+			image_profile: { type: GraphQLString },
+			genre: { type: GraphQLString },
+		},
+		resolve(parent, args, request) {
+			return is_authenticate(async function ({ id, is_restaurant }) {
+				if (is_restaurant === _NOT_RESTAURANT) throw new Error(_NOT_RESTAURANT);
+				return await Restaurant.findOneAndUpdate({ _id: id }, args).catch(
+					(err) => {
+						console.log(err);
+					}
+				);
+			}, request);
+		},
+	},
 };

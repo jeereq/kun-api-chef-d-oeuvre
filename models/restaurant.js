@@ -21,6 +21,7 @@ const restaurantSchema = new Schema(
 		name: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		email: {
 			type: String,
@@ -43,7 +44,8 @@ const restaurantSchema = new Schema(
 				latitude: { type: Number },
 			},
 		],
-		themes: [String],
+		visites: { type: Number, default: 0 },
+		themes: [{ type: Schema.Types.ObjectId, ref: 'Theme' }],
 	},
 	{
 		timestamps: true,

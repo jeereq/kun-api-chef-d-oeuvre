@@ -22,7 +22,13 @@ module.exports = {
 				if (is_auth)
 					return Restaurant.findById(args.id)
 						.then((data) => {
-							if (data !== null) return data;
+							if (data !== null) {
+								Restaurant.findOneAndUpdate(
+									{ _id: data._id },
+									{ visites: data.visites + 1 }
+								);
+								return { ...data, visites: data.visites + 1 };
+							}
 							throw new Error(
 								'restaurant non enregistrer sur notre plateforme !!!!'
 							);

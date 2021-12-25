@@ -5,7 +5,7 @@ const categorySchema = new Schema({
 		type: String,
 		required: true,
 	},
-	meals: [{ type: Schema.Types.ObjectId, ref: 'Meal' }],
+	meals: [{ type: Schema.Types.ObjectId, ref: 'Restaurant' }],
 });
 
 module.exports = model('Category', categorySchema);

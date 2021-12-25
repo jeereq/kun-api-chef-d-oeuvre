@@ -1,10 +1,7 @@
 const {
 	GraphQLObjectType,
-	GraphQLString,
 	GraphQLInt,
-	GraphQLID,
 	GraphQLNonNull,
-	GraphQLBoolean,
 	GraphQLList,
 } = require('graphql');
 
@@ -31,6 +28,38 @@ module.exports = new GraphQLObjectType({
 			type: new GraphQLList(userType),
 			resolve() {
 				return User.find({ authorisation: false });
+			},
+		},
+		femme: {
+			type: new GraphQLList(userType),
+			resolve() {
+				return User.find({ authorisation: false, genre: 'f' }).then((data) => {
+					return data;
+				});
+			},
+		},
+		femme_length: {
+			type: new GraphQLNonNull(GraphQLInt),
+			resolve() {
+				return User.find({ authorisation: false, genre: 'f' }).then((data) => {
+					return data.length;
+				});
+			},
+		},
+		homme: {
+			type: new GraphQLList(userType),
+			resolve() {
+				return User.find({ authorisation: false, genre: 'm' }).then((data) => {
+					return data;
+				});
+			},
+		},
+		homme_length: {
+			type: new GraphQLNonNull(GraphQLInt),
+			resolve() {
+				return User.find({ authorisation: false, genre: 'm' }).then((data) => {
+					return data.length;
+				});
 			},
 		},
 	}),

@@ -18,9 +18,33 @@ module.exports = {
 			phone_number: {
 				type: new GraphQLNonNull(GraphQLString),
 			},
+			image_profile: { type: new GraphQLNonNull(GraphQLString) },
 		},
 		resolve(parent, args) {
 			return User.signup(args);
+		},
+	},
+	update_password: {
+		type: new GraphQLNonNull(userType),
+	},
+	update_profil: {
+		type: userType,
+		args: {
+			_id: { type: GraphQLString },
+			username: { type: GraphQLString },
+			email: { type: GraphQLString },
+			phone_number: { type: GraphQLString },
+			image_profile: { type: GraphQLString },
+			genre: { type: GraphQLString },
+		},
+		resolve(parent, args, request) {
+			return is_authenticate(async function ({ id, is_user }) {
+				//if (is_user === _NOT_USER) throw new Error(_NOT_USER);
+				return await User.findById(id).then((data) => {
+					console.log(id);
+					console.log(data);
+				});
+			}, request);
 		},
 	},
 	desactive_user: {

@@ -1,10 +1,7 @@
 const {
 	GraphQLObjectType,
-	GraphQLString,
 	GraphQLInt,
-	GraphQLID,
 	GraphQLNonNull,
-	GraphQLBoolean,
 	GraphQLList,
 } = require('graphql');
 
@@ -35,3 +32,4 @@ module.exports = new GraphQLObjectType({
 		},
 	}),
 });
+	

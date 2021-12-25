@@ -47,8 +47,6 @@ module.exports = function (req, res, next) {
 
 			if (authentification.id !== null) authentification.is_auth = true;
 
-			console.log(authentification);
-
 			req.authentification = authentification;
 			next();
 		})

@@ -5,6 +5,7 @@ const {
 	GraphQLList,
 	GraphQLNonNull,
 	GraphQLBoolean,
+	GraphQLInt,
 } = require('graphql');
 
 //schemas
@@ -35,7 +36,7 @@ module.exports = new GraphQLObjectType({
 			},
 		},
 		themes: {
-			type: new GraphQLNonNull(themeType),
+			type: new GraphQLList(themeType),
 			resolve() {
 				return Theme.find({});
 			},
@@ -43,5 +44,6 @@ module.exports = new GraphQLObjectType({
 		localisations: { type: new GraphQLList(localisationType) },
 		token: { type: GraphQLString },
 		active: { type: new GraphQLNonNull(GraphQLBoolean) },
+		visites: { type: GraphQLInt },
 	}),
 });

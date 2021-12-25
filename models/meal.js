@@ -19,7 +19,9 @@ const mealSchema = new Schema(
 			ref: 'Restaurant',
 			required: true,
 		},
-		categorys: [String],
+		categorys: [
+			{ type: Schema.Types.ObjectId, ref: 'Category', required: true },
+		],
 	},
 	{ timestamps: true }
 );

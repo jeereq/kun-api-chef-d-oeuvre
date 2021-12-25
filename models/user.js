@@ -29,6 +29,7 @@ const userSchema = new Schema(
 		email: {
 			type: String,
 			required: [true, "l' email est réquis "],
+			unique: true,
 		},
 		password: {
 			type: String,
