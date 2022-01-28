@@ -18,7 +18,7 @@ module.exports = new GraphQLObjectType({
 	name: 'meals_statistiques',
 	fields: () => ({
 		length: {
-			type: new GraphQLNonNull(GraphQLInt),
+			type: GraphQLInt,
 			resolve() {
 				return Meal.find({}).then((data) => {
 					return data.length;
@@ -32,7 +32,7 @@ module.exports = new GraphQLObjectType({
 			},
 		},
 		moyenne: {
-			type: new GraphQLNonNull(GraphQLInt),
+			type: GraphQLInt,
 			resolve() {
 				return Meal.find().then(async (data) =>
 					Math.round(

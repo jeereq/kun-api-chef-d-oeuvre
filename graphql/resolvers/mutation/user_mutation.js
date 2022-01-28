@@ -19,6 +19,7 @@ module.exports = {
 				type: new GraphQLNonNull(GraphQLString),
 			},
 			image_profile: { type: new GraphQLNonNull(GraphQLString) },
+			genre: { type: GraphQLString },
 		},
 		resolve(parent, args) {
 			return User.signup(args);

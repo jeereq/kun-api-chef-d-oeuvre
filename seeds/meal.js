@@ -1,6 +1,7 @@
 const Meal = require('../models/meal');
 const Restaurant = require('../models/restaurant');
 const mongoose = require('mongoose');
+const { faker } = require('@faker-js/faker');
 
 const Taille = [...new Array(50)];
 
@@ -15,14 +16,16 @@ mongoose
 			data.map((itemID) => {
 				Taille.map(async (item, index) => {
 					const meal = new Meal({
-						name: 'ravens' + index,
-						password: 'mingandajeereq',
-						phone_number: '0811527302',
+						name: faker.animal.type(),
 						price: index * 3,
-						profil_image: 'liste',
+						profil_image: faker.image.food(),
 						restaurant_id: itemID._id,
 						categorys: [],
-						images: [],
+						images: [
+							faker.image.food(),
+							faker.image.food(),
+							faker.image.food(),
+						],
 					});
 					await meal
 						.save()

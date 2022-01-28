@@ -1,5 +1,6 @@
 const Restaurant = require('../models/restaurant');
 const mongoose = require('mongoose');
+const { faker } = require('@faker-js/faker');
 
 const Taille = [...new Array(50)];
 
@@ -12,15 +13,16 @@ mongoose
 	.then(() => {
 		Taille.map(async (item, index) => {
 			const restaurant = new Restaurant({
-				email: 'jeereq' + index * 100 + '@gmail.com',
-				name: 'ravens' + index,
+				email: faker.internet.email(),
+				name: faker.name.firstName(),
 				password: 'mingandajeereq',
-				phone_number: '0811527302',
-				genre: index % 2 == 0 ? 'f' : 'm',
-				profil_image: 'liste',
+				phone_number: faker.phone.phoneNumber(),
+				genre: index % 2 == 0 ? 'F' : 'M',
+				profil_image: faker.image.avatar(),
 				themes: [],
 				localisations: [],
 				images: [],
+				visites: faker.datatype.number(),
 			});
 			await restaurant
 				.save()

@@ -27,9 +27,8 @@ module.exports = new GraphQLObjectType({
 		top: {
 			type: new GraphQLList(restaurantType),
 			resolve() {
-				return Restaurant.find();
+				return Restaurant.find().limit(5).sort({ visites: -1 });
 			},
 		},
 	}),
 });
-	

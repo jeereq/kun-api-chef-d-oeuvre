@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
+const { faker } = require('@faker-js/faker');
 
 const Taille = [...new Array(50)];
 
@@ -12,12 +13,12 @@ mongoose
 	.then(() => {
 		Taille.map(async (item, index) => {
 			const user = new User({
-				email: 'jeereq' + index * 100 + '@gmail.com',
-				username: 'jeereq' + index,
+				email: faker.internet.email(),
+				username: faker.name.firstName(),
 				password: 'mingandajeereq',
-				phone_number: '0811527302',
-				genre: index % 2 == 0 ? 'f' : 'm',
-				image_profile: 'liste',
+				phone_number: faker.phone.phoneNumber(),
+				genre: index % 2 == 0 ? 'F' : 'M',
+				image_profile: faker.image.avatar(),
 			});
 			await user
 				.save()

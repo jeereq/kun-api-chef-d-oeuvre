@@ -27,13 +27,13 @@ module.exports = new GraphQLObjectType({
 		top: {
 			type: new GraphQLList(userType),
 			resolve() {
-				return User.find({ authorisation: false });
+				return User.find({ authorisation: false }).limit(5).sort({ _id: -1 });
 			},
 		},
 		femme: {
 			type: new GraphQLList(userType),
 			resolve() {
-				return User.find({ authorisation: false, genre: 'f' }).then((data) => {
+				return User.find({ authorisation: false, genre: 'F' }).then((data) => {
 					return data;
 				});
 			},
@@ -41,7 +41,7 @@ module.exports = new GraphQLObjectType({
 		femme_length: {
 			type: new GraphQLNonNull(GraphQLInt),
 			resolve() {
-				return User.find({ authorisation: false, genre: 'f' }).then((data) => {
+				return User.find({ authorisation: false, genre: 'F' }).then((data) => {
 					return data.length;
 				});
 			},
@@ -49,7 +49,7 @@ module.exports = new GraphQLObjectType({
 		homme: {
 			type: new GraphQLList(userType),
 			resolve() {
-				return User.find({ authorisation: false, genre: 'm' }).then((data) => {
+				return User.find({ authorisation: false, genre: 'M' }).then((data) => {
 					return data;
 				});
 			},
@@ -57,7 +57,7 @@ module.exports = new GraphQLObjectType({
 		homme_length: {
 			type: new GraphQLNonNull(GraphQLInt),
 			resolve() {
-				return User.find({ authorisation: false, genre: 'm' }).then((data) => {
+				return User.find({ authorisation: false, genre: 'M' }).then((data) => {
 					return data.length;
 				});
 			},

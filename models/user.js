@@ -41,12 +41,14 @@ const userSchema = new Schema(
 		},
 		genre: {
 			type: String,
+			upperCase: true,
 			maxLength: 2,
 		},
 		image_profile: {
 			type: String,
 			default: '',
 		},
+		visites: { type: Number, default: 0 },
 		active: { type: Boolean, default: true },
 		authorisation: { type: Boolean, default: false },
 	},
@@ -80,7 +82,7 @@ userSchema.statics.is_user = async function (token) {
 };
 
 userSchema.statics.login = async function ({ email, password }) {
-	const [user] = await this.find({ email });
+	const user = await this.findOne({ email });
 
 	if (!user) throw new Error('utilisateur inexistant !!!');
 
@@ -109,9 +111,7 @@ userSchema.statics.signup = async function (args) {
 	const passwordHashed = await bcrypt.hash(password, salt);
 
 	const newUser = { ...argument, password: passwordHashed };
-	const user = new this(newUser).then((data) => {
-		return data;
-	});
+	const user = new this(newUser);
 
 	return user.save();
 };
